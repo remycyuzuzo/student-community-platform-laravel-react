@@ -68,6 +68,7 @@ class RegisteredUserController extends Controller
             'bio' => '',
             'profile_pic' => $filePath,
             'user_status' => 1,
+            'role' => 'student',
         ]);
 
 

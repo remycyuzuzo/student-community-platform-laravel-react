@@ -27,6 +27,7 @@ use App\Http\Controllers\DiscoverController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SearchController;
 
 /*
@@ -48,7 +49,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/', [HomePageController::class, 'renderHomePage'])->middleware(['auth', 'verified']);
 Route::get('/discover', [DiscoverController::class, 'render'])->middleware(['auth', 'verified']);
-Route::get('/schools', [HomePageController::class, 'renderHomePage'])->middleware(['auth', 'verified']);
+Route::get('/schools', [SchoolController::class, 'renderSchools'])->middleware(['auth', 'verified']);
 
 Route::get('/new-community', [CommunityController::class, 'create'])->name('new-community')->middleware('auth');
 Route::post('/new-community', [CommunityController::class, 'store'])->middleware('auth');
@@ -87,12 +88,18 @@ Route::post('/admin/login', [AdminLoginController::class, 'login']);
 Route::get('/admin/users', [AdminManageUsersController::class, 'all'])->name('manageUsers');
 Route::get('/admin/users/new', [AdminManageUsersController::class, 'create'])->name('newUser');
 Route::post('/admin/users/new', [AdminManageUsersController::class, 'store']);
+Route::post('/admin/users/delete/{userId}', [AdminManageUsersController::class, 'destroy'])->name('deleteUser');
+Route::get('/admin/users/disable/{userId}', [AdminManageUsersController::class, 'disable'])->name('disableUser');
 
 Route::get('/admin/schools', [AdminSchoolsController::class, 'all'])->name('allSchools');
 Route::get('/admin/schools/new', [AdminSchoolsController::class, 'create'])->name('newSchool');
 Route::post('/admin/schools/new', [AdminSchoolsController::class, 'store']);
+Route::post('/admin/schools/delete/{schoolId}', [AdminSchoolsController::class, 'destroy'])->name('deleteSchool');
+Route::get('/admin/schools/update/{schoolId}', [AdminSchoolsController::class, 'updateForm'])->name('updateSchool')->middleware(['auth']);
+Route::post('/admin/schools/update/{schoolId}', [AdminSchoolsController::class, 'update']);
 
 
+Route::get('/school/{schoolId}', [SchoolController::class, 'renderSchoolProfile'])->name('schoolProfile')->middleware('auth');
 
 
 Route::middleware('guest')->group(function () {
