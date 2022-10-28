@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\AdminManageUsersController;
+use App\Http\Controllers\AdminSchoolsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -70,8 +74,25 @@ Route::get('/get/allCommunitiesPosts', [HomePageController::class, 'getPosts'])-
 Route::get('/get/userPosts/{userId}', [HomePageController::class, 'getPosts'])->name('showUserProfile')->middleware('auth');
 
 Route::get('/messages', [MessageController::class, 'getAllConversations'])->name('messages')->middleware('auth');
-Route::get('/messages/conversation/{conversationId}', [MessageController::class, 'getAllConversations'])->name('conversation');
+Route::get('/messages/conversation/{conversationToken}', [MessageController::class, 'getConversation'])->name('conversation');
 Route::get('/chat/{userName}', [MessageController::class, 'messageRouter'])->name('messageRouter')->middleware('auth');
+
+Route::post('/chat/send-message/{conversationToken}', [MessageController::class, 'sendMessage'])->name('sendMessage')->middleware(['auth', 'verified']);
+Route::get('/get/chat/messages/{conversationToken}', [MessageController::class, 'getConversationMessage'])->name('getConversationMessage')->middleware('auth');
+
+Route::get('/admin/', [AdminDashboardController::class, 'render']);
+Route::get('/admin/login', [AdminLoginController::class, 'render'])->name('adminLogin');
+Route::post('/admin/login', [AdminLoginController::class, 'login']);
+
+Route::get('/admin/users', [AdminManageUsersController::class, 'all'])->name('manageUsers');
+Route::get('/admin/users/new', [AdminManageUsersController::class, 'create'])->name('newUser');
+Route::post('/admin/users/new', [AdminManageUsersController::class, 'store']);
+
+Route::get('/admin/schools', [AdminSchoolsController::class, 'all'])->name('allSchools');
+Route::get('/admin/schools/new', [AdminSchoolsController::class, 'create'])->name('newSchool');
+Route::post('/admin/schools/new', [AdminSchoolsController::class, 'store']);
+
+
 
 
 Route::middleware('guest')->group(function () {

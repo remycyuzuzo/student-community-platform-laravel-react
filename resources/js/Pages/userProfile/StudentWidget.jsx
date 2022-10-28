@@ -4,6 +4,7 @@ import { BsFillBookmarkPlusFill } from "react-icons/bs";
 import RouterLink from "@/Components/myComponents/ui-elements/RouterLink";
 
 function UserWidget({ userInfo }) {
+    // console.log(userInfo);
     return (
         <div className="flex flex-wrap gap-3 mb-4 justify-center md:justify-start md:gap-5">
             <div className="profile-image relative w-48 h-48">
@@ -16,11 +17,9 @@ function UserWidget({ userInfo }) {
                         <h2 className=" text-2xl">{`${userInfo.first_name} ${userInfo.last_name}`}</h2>
                     </RouterLink>
                     <p>Student at INES Ruhengeri</p>
-                    <p>
-                        <RouterLink to="/contact-info/remycyuzuzo" className="text-blue-500 py-3 inline-block">contact info</RouterLink>
-                    </p>
                 </div>
                 <div>
+
                     <RouterLink to={route('messageRouter', userInfo.username)} className="px-5 py-2 rounded-xl bg-blue-700 text-white"><RiMessage3Fill className="inline-block" /> message</RouterLink>
                     <RouterLink className="px-2 py-2 rounded-xl bg-orange-200 text-blue-900 ml-2"><BsFillBookmarkPlusFill className="inline-block" /> save</RouterLink>
                 </div>

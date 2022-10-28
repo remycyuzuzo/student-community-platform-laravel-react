@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Conversation extends Model
 {
     use HasFactory;
+
+    public function participants()
+    {
+        return $this->hasMany(ConversationParticipants::class);
+    }
+
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

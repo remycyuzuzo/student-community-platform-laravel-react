@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Conversation;
 use App\Models\ConversationParticipants;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,8 +20,34 @@ class MessageController extends Controller
         ]);
     }
 
-    public function getConversation($conversationId)
+    public function getConversation($conversationToken)
     {
+        $conversation = Conversation::all()->where('token', '=', $conversationToken)->first();
+        if (!$conversation) {
+            return back()->with('conversation not found');
+        }
+        $participantOne = null;
+        foreach ($conversation->participants as $participant) {
+            if ($participant->user->id == auth()->user()->id) {
+                continue;
+            }
+            $participantOne = $participant->user;
+        }
+
+        return Inertia::render('messages/chatPage', [
+            'conversationToken' => $conversationToken,
+            'participantOne' => $participantOne
+        ]);
+    }
+
+    public function getConversationMessage($conversationToken)
+    {
+        $messages = Message::all()->where('conversation_id')->load('user')->toArray();
+        if ($messages) {
+            return $messages;
+        } else {
+            return [];
+        }
     }
 
     public function messageRouter($userName)
@@ -28,11 +55,50 @@ class MessageController extends Controller
         $user = User::all()->where('username', '=', $userName)->first();
         $current_user_id = auth()->user()->id;
 
-        $userConversation = Conversation::all()
-            ->where('user_id', '=', $current_user_id);
+        $userConversations = ConversationParticipants::all()->where('user_id', '=', $user->id);
+        $currentUserConversations = ConversationParticipants::all()->where('user_id', '=', $current_user_id);
 
-        if (!$userConversation) {
-            $conversationInstance = Conversation::create([]);
+        // $all_user_conversations = $userConversations->intersect($currentUserConversations)->first();
+        $all_user_conversations = $userConversations->intersectByKeys([
+            'conversation_id'
+        ])->first();
+
+        if ($all_user_conversations !== null) {
+            return redirect('/messages/conversation/' . $all_user_conversations->conversation->token);
+        } else {
+            $new_conversation = Conversation::create([
+                'token' => uniqid(),
+            ]);
+            ConversationParticipants::create([
+                'conversation_id' => $new_conversation->id,
+                'user_id' => $user->id,
+            ]);
+            ConversationParticipants::create([
+                'conversation_id' => $new_conversation->id,
+                'user_id' => $current_user_id,
+            ]);
+            return redirect('/messages/conversation/' . $new_conversation->token);
         }
+        return back();
+    }
+
+    public function sendMessage(Request $request, $conversationToken)
+    {
+        $conversation = Conversation::all()->where('token', '=', $conversationToken)->first();
+        if (!$conversation) {
+            return back()->with('conversation not found');
+        }
+
+        $request->validate([
+            'messageText' => 'required',
+        ]);
+
+        $newMessageInstance = Message::create([
+            'message' => $request->messageText,
+            'user_id' => auth()->user()->id,
+            'conversation_id' => $conversation->id
+        ]);
+
+        return back();
     }
 }
