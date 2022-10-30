@@ -20,7 +20,12 @@ class SearchController extends Controller
         $posts = [];
 
         if ($keyword != "") {
-            $users = DB::table('users')->where('first_name', 'LIKE', "%{$keyword}%")->orWhere('middle_name', 'LIKE', "%{$keyword}%")->get()->toArray();
+            $users = DB::table('users')
+                ->where('first_name', 'LIKE', "%{$keyword}%")
+                ->orWhere('middle_name', 'LIKE', "%{$keyword}%")
+                ->orWhere('last_name', 'LIKE', "%{$keyword}%")
+                ->get()->toArray();
+
             $communities = DB::table('communities')->where('name', 'LIKE', "%{$keyword}%")->get()->toArray();
             $posts = DB::table('community_posts')->where('post_texts', 'LIKE', "%{$keyword}%")->get()->toArray();
         }

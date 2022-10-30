@@ -85,18 +85,18 @@ Route::get('/admin/', [AdminDashboardController::class, 'render']);
 Route::get('/admin/login', [AdminLoginController::class, 'render'])->name('adminLogin');
 Route::post('/admin/login', [AdminLoginController::class, 'login']);
 
-Route::get('/admin/users', [AdminManageUsersController::class, 'all'])->name('manageUsers');
-Route::get('/admin/users/new', [AdminManageUsersController::class, 'create'])->name('newUser');
-Route::post('/admin/users/new', [AdminManageUsersController::class, 'store']);
-Route::post('/admin/users/delete/{userId}', [AdminManageUsersController::class, 'destroy'])->name('deleteUser');
-Route::get('/admin/users/disable/{userId}', [AdminManageUsersController::class, 'disable'])->name('disableUser');
+Route::get('/admin/users', [AdminManageUsersController::class, 'all'])->name('manageUsers')->middleware(['auth']);
+Route::get('/admin/users/new', [AdminManageUsersController::class, 'create'])->name('newUser')->middleware(['auth']);
+Route::post('/admin/users/new', [AdminManageUsersController::class, 'store'])->middleware(['auth']);
+Route::post('/admin/users/delete/{userId}', [AdminManageUsersController::class, 'destroy'])->name('deleteUser')->middleware(['auth']);
+Route::get('/admin/users/disable/{userId}', [AdminManageUsersController::class, 'disable'])->name('disableUser')->middleware(['auth']);
 
-Route::get('/admin/schools', [AdminSchoolsController::class, 'all'])->name('allSchools');
-Route::get('/admin/schools/new', [AdminSchoolsController::class, 'create'])->name('newSchool');
+Route::get('/admin/schools', [AdminSchoolsController::class, 'all'])->name('allSchools')->middleware('auth');
+Route::get('/admin/schools/new', [AdminSchoolsController::class, 'create'])->name('newSchool')->middleware('auth');
 Route::post('/admin/schools/new', [AdminSchoolsController::class, 'store']);
-Route::post('/admin/schools/delete/{schoolId}', [AdminSchoolsController::class, 'destroy'])->name('deleteSchool');
+Route::post('/admin/schools/delete/{schoolId}', [AdminSchoolsController::class, 'destroy'])->name('deleteSchool')->middleware('auth');
 Route::get('/admin/schools/update/{schoolId}', [AdminSchoolsController::class, 'updateForm'])->name('updateSchool')->middleware(['auth']);
-Route::post('/admin/schools/update/{schoolId}', [AdminSchoolsController::class, 'update']);
+Route::post('/admin/schools/update/{schoolId}', [AdminSchoolsController::class, 'update'])->middleware('auth');
 
 
 Route::get('/school/{schoolId}', [SchoolController::class, 'renderSchoolProfile'])->name('schoolProfile')->middleware('auth');

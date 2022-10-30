@@ -30,7 +30,7 @@ function ChatPage({ conversationToken, participantOne }) {
             messages = toArray(messages)
         }
         let comps = messages.map(message => (
-            message.user_id == participantOne.id ? <OtherUserMessageBox message={message} /> : <CurrentUserMessageBox message={message} />
+            message.user_id == participantOne.id ? <OtherUserMessageBox key={message.id} message={message} /> : <CurrentUserMessageBox key={message.id} message={message} />
         ));
         setMessageState(comps)
     }

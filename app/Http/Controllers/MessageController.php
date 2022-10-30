@@ -42,7 +42,11 @@ class MessageController extends Controller
 
     public function getConversationMessage($conversationToken)
     {
-        $messages = Message::all()->where('conversation_id')->load('user')->toArray();
+        $conversation = Conversation::all()->where('token', '=', $conversationToken)->first();
+        if (!$conversation) {
+            return back()->with('conversation not found');
+        }
+        $messages = Message::all()->where('conversation_id', '=', $conversation->id)->load('user')->toArray();
         if ($messages) {
             return $messages;
         } else {

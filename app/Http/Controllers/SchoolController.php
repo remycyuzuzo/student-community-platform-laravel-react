@@ -44,7 +44,7 @@ class SchoolController extends Controller
 
     public function renderSchoolProfile($schoolId)
     {
-        $school = School::all()->where('id', '=', $schoolId)->first();
+        $school = School::all()->where('id', '=', $schoolId)->load(['province', 'sector', 'district', 'city'])->first();
         if (!$school) {
             abort(404);
         }
