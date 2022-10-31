@@ -2,9 +2,13 @@
 
 import RouterLink from "@/Components/myComponents/ui-elements/RouterLink";
 import { timeSince } from "@/functions/timeAgo";
+import { toArray } from "lodash";
+import { BsArrowUp } from "react-icons/bs";
 import { RiMessage3Fill } from "react-icons/ri"
 
 function SinglePostCard({ postInfo }) {
+    const handleReact = () => { }
+
     return (
         <div className="bg-white dark:bg-gray-700 dark:text-slate-300 mb-3 rounded-2xl shadow-md p-4 hover:border-blue-300 dark:hover:bg-gray-600 transition-all">
             <div className="card-header flex">
@@ -31,10 +35,10 @@ function SinglePostCard({ postInfo }) {
                 {postInfo.post_texts}
             </div>
             <div className="foot flex items-center">
-                <a href="/" className="flex rounded-2xl bg-blue-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-500 dark:text-gray-200 p-1">
-                    <span className="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-400 rounded-full p-1 text-sm">😀</span>
-                    <span className="inline-block px-2 text-sm">45</span>
-                </a>
+                <button onClick={handleReact} className="flex rounded-2xl bg-blue-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-500 dark:text-gray-200 p-1">
+                    <span className="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-400 rounded-full p-1 text-sm"><BsArrowUp /></span>
+                    <span className="inline-block px-2 text-sm">{toArray(postInfo.reactions).length}</span>
+                </button>
                 <a href="/" className="reactions bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-500 dark:text-gray-300 p-1 inline-block ml-2 rounded-md shadow-sm">
                     <RiMessage3Fill className="inline-block" />
                     <span className="px-2">answer</span>

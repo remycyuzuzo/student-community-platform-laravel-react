@@ -1,25 +1,25 @@
 @extends('admin.layouts.base')
 
 @section('title')
-    New InfoBoard Post
+    Update InfoBoard Post
 @endsection
 
 @section('main')
     <div class="col-12">
         <div class="card recent-sales overflow-auto">
             <div class="card-body">
-                <h5 class="card-title">Create the post</h5>
+                <h5 class="card-title">Update the post</h5>
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Fill out this form</h5>
 
                         <!-- Multi Columns Form -->
                         <form class="row g-3" method="POST" enctype="multipart/form-data" id="newPostForm"
-                            action="{{ route('newPost') }}">
+                            action="{{ route('editPost', $post->id) }}">
                             @csrf
                             <div class="col-md-12">
                                 <label for="inputName5" class="form-label" required>Post title</label>
-                                <input type="text" name="title" class="form-control" value="{{ old('title') }}"
+                                <input type="text" name="title" value="{{ $post->title }}" class="form-control"
                                     id="inputName5">
                                 @error('title')
                                     <span class="text-danger">{{ $message }}</span>
@@ -30,22 +30,27 @@
                                     <label for="content" class="form-label">Content</label>
                                     <!-- Quill Editor Default -->
                                     <div class="quill-editor-default">
-                                        <p>
-                                            {{ old('content') }}
-                                        </p>
+                                        @php
+                                            echo $post->body;
+                                            
+                                        @endphp
                                     </div>
                                     <!-- End Quill Editor Default -->
                                 </div>
                             </div>
 
                             <div class="col-12">
-                                <label for="thumb">Thumbnail</label>
+                                <label for="thumb">Thumbnail <small class="text-muted">(leave it if you don't want to
+                                        change the thumbnail)</small></label>
                                 <input type="file" name="thumb" class="form-control" id="thumb">
                             </div>
 
                             <div class="col-12">
                                 <label for="tags">Tags</label>
                                 <select class="js-data-example-ajax form-control" name="tags[]" id="tags" multiple>
+                                    @foreach ($post->tags as $tag)
+                                        <option value="{{ $tag->tag->id }}" selected>{{ $tag->tag->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -53,10 +58,14 @@
                                 <label for="category">Category</label>
                                 <select name="category" id="category" class="form-control" required>
                                     <option disabled selected>Select the post category</option>
-                                    <option value="blog">Blog post</option>
-                                    <option value="article">article</option>
-                                    <option value="scholarship">scholarship</option>
-                                    <option value="announcement">announcement</option>
+                                    <option value="blog" @if ($post->category == 'blog') @selected(true) @endif>Blog
+                                        post</option>
+                                    <option value="article" @if ($post->category == 'article') @selected(true) @endif>article
+                                    </option>
+                                    <option value="scholarship" @if ($post->category == 'scholarship') @selected(true) @endif>
+                                        scholarship</option>
+                                    <option value="announcement" @if ($post->category == 'announcement') @selected(true) @endif>
+                                        announcement</option>
                                 </select>
                             </div>
 

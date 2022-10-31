@@ -83,6 +83,11 @@ Route::get('/chat/{userName}', [MessageController::class, 'messageRouter'])->nam
 Route::post('/chat/send-message/{conversationToken}', [MessageController::class, 'sendMessage'])->name('sendMessage')->middleware(['auth', 'verified']);
 Route::get('/get/chat/messages/{conversationToken}', [MessageController::class, 'getConversationMessage'])->name('getConversationMessage')->middleware('auth');
 
+
+Route::get('/info-board', [InfoBoardController::class, 'renderPosts'])->name('renderPosts')->middleware('auth');
+Route::get('/info-board/article/{postId}', [InfoBoardController::class, 'singleBlogPage'])->name('singleBlogPage')->middleware('auth');
+
+
 Route::get('/admin/', [AdminDashboardController::class, 'render'])->middleware('auth');
 Route::get('/admin/login', [AdminLoginController::class, 'render'])->name('adminLogin');
 Route::post('/admin/login', [AdminLoginController::class, 'login']);
@@ -107,6 +112,10 @@ Route::get('/school/{schoolId}', [SchoolController::class, 'renderSchoolProfile'
 Route::get('/admin/posts', [InfoBoardController::class, 'all'])->name('managePosts')->middleware('auth');
 Route::get('/admin/posts/new', [InfoBoardController::class, 'create'])->name('newPost')->middleware('auth');
 Route::post('/admin/posts/new', [InfoBoardController::class, 'store']);
+Route::post('/admin/posts/delete/{infoBoardId}', [InfoBoardController::class, 'destroy'])->name('deletePost')->middleware('auth');
+Route::get('/admin/posts/update/{infoBoardId}', [InfoBoardController::class, 'edit'])->name('editPost')->middleware('auth');
+Route::post('/admin/posts/update/{infoBoardId}', [InfoBoardController::class, 'update']);
+Route::get('/admin/posts/unpublish/{infoBoardId}', [InfoBoardController::class, 'unPublish'])->name('unPublish')->middleware('auth');
 
 Route::get('/get/tag', [TagController::class, 'all']);
 

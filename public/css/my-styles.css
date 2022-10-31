@@ -1,3 +1,13 @@
 body {
     font-family: "Nunito Sans", sans-serif !important;
 }
+
+.thumb {
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    .thumb {
+        max-width: 400vw;
+    }
+}

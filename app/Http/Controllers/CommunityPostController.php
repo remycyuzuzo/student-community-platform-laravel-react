@@ -36,7 +36,7 @@ class CommunityPostController extends Controller
         if (!$community) {
             return abort(404);
         }
-        $posts = CommunityPost::all()->where('community_id', '=', $community->id)->load(['user', 'community'])->toArray();
+        $posts = CommunityPost::all()->where('community_id', '=', $community->id)->load(['user', 'community', 'reactions'])->toArray();
 
         return $posts;
     }

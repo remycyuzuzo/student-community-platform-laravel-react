@@ -15,7 +15,7 @@ function MainTopNav({ auth }) {
   const { data, setData, post, get, processing, errors, reset } = useForm({
     k: '',
   });
-  console.log(auth);
+
   const openMenuToggler = () => {
     if (isMobileMenuOpen) {
       openMobileMenu(false)
