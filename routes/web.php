@@ -25,10 +25,12 @@ use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\CommunityPostController;
 use App\Http\Controllers\DiscoverController;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\InfoBoardController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +83,7 @@ Route::get('/chat/{userName}', [MessageController::class, 'messageRouter'])->nam
 Route::post('/chat/send-message/{conversationToken}', [MessageController::class, 'sendMessage'])->name('sendMessage')->middleware(['auth', 'verified']);
 Route::get('/get/chat/messages/{conversationToken}', [MessageController::class, 'getConversationMessage'])->name('getConversationMessage')->middleware('auth');
 
-Route::get('/admin/', [AdminDashboardController::class, 'render']);
+Route::get('/admin/', [AdminDashboardController::class, 'render'])->middleware('auth');
 Route::get('/admin/login', [AdminLoginController::class, 'render'])->name('adminLogin');
 Route::post('/admin/login', [AdminLoginController::class, 'login']);
 
@@ -101,6 +103,12 @@ Route::post('/admin/schools/update/{schoolId}', [AdminSchoolsController::class, 
 
 Route::get('/school/{schoolId}', [SchoolController::class, 'renderSchoolProfile'])->name('schoolProfile')->middleware('auth');
 
+
+Route::get('/admin/posts', [InfoBoardController::class, 'all'])->name('managePosts')->middleware('auth');
+Route::get('/admin/posts/new', [InfoBoardController::class, 'create'])->name('newPost')->middleware('auth');
+Route::post('/admin/posts/new', [InfoBoardController::class, 'store']);
+
+Route::get('/get/tag', [TagController::class, 'all']);
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])

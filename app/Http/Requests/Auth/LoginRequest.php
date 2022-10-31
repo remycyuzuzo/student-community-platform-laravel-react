@@ -46,17 +46,17 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        $user = User::all()->where('email', '=', $this->only('email')['email'])->first();
+        if ($user && !$user->user_status) {
+            throw ValidationException::withMessages([
+                'email' => 'This user is disabled',
+            ]);
+        }
         if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
-            ]);
-        }
-        $user = User::all()->where('email', '=', $this->only('email'))->first();
-        if (!$user->user_status) {
-            throw ValidationException::withMessages([
-                'email' => 'This user is disabled',
             ]);
         }
 

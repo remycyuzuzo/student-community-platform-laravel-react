@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import { useState } from 'react';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -18,6 +19,7 @@ export default function Register() {
     });
 
     useEffect(() => {
+
         return () => {
             reset('password', 'password_confirmation');
         };
@@ -32,6 +34,8 @@ export default function Register() {
 
         post(route('register'));
     };
+
+
 
     return (
         <GuestLayout>
@@ -86,18 +90,21 @@ export default function Register() {
                     <label className="block">How old are you?</label>
                     <select name="day" onChange={e => setData('day', e.target.value)} className="inline-block cursor-pointer px-4 w-32 py-1 rounded-xl dark:bg-gray-800">
                         <option value={null}>day</option>
-                        <option>1</option>
-                        <option>2</option>
+                        {[...Array(31).keys()].map((key) => (
+                            <option>{key + 1}</option>
+                        ))}
                     </select>
                     <select name="month" onChange={e => setData('month', e.target.value)} className="inline-block cursor-pointer px-4 w-32 py-1 rounded-xl ml-3 dark:bg-gray-800">
-                        <option value={null}>month</option>
-                        <option>1</option>
-                        <option>2</option>
+                        <option value={null} selected disabled>month</option>
+                        {[...Array(12).keys()].map((key) => (
+                            <option>{key + 1}</option>
+                        ))}
                     </select>
                     <select name="year" onChange={e => setData('year', e.target.value)} className="inline-block cursor-pointer px-4 w-32 py-1 rounded-xl ml-3 dark:bg-gray-800">
-                        <option value={null}>Year</option>
-                        <option>1999</option>
-                        <option>2000</option>
+                        <option selected disabled value={null}>Year</option>
+                        {[1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004].map((key) => (
+                            <option>{key}</option>
+                        ))}
                     </select>
                 </div>
 

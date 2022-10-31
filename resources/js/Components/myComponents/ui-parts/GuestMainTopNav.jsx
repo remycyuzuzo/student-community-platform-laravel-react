@@ -10,7 +10,7 @@ import { useForm } from "@inertiajs/inertia-react";
 import DropDown from "../ui-elements/UserDropdown";
 import { useContext } from "react";
 
-function MainTopNav({ auth }) {
+function GuestMainTopNav({ auth }) {
   const [isMobileMenuOpen, openMobileMenu] = useState(false)
   const { data, setData, post, get, processing, errors, reset } = useForm({
     k: '',
@@ -78,11 +78,6 @@ function MainTopNav({ auth }) {
                 <li>
                   <DarkModeToggler />
                 </li>
-                {auth ? (
-                  <li>
-                    <DropDown />
-                  </li>
-                ) : ''}
                 <li className="mb-2 lg:mb-0 lg:hidden">
                   <button className="inline-block text-gray-800 dark:text-gray-100" onClick={openMenuToggler}>
                     <GiHamburgerMenu className="w-5 inline-block scale-125" />
@@ -97,4 +92,4 @@ function MainTopNav({ auth }) {
   );
 }
 
-export default MainTopNav;
+export default GuestMainTopNav;

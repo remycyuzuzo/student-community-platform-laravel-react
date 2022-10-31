@@ -5,7 +5,7 @@ import Layout from './AppLayout';
 
 export default function Guest({ children }) {
     return (
-        <Layout>
+        <Layout hideAuth={1}>
             <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 ">
                 <div>
                     <Link href="/">
